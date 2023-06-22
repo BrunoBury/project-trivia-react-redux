@@ -34,6 +34,19 @@ describe('Testa página de Login', () => {
     userEvent.type(emailInput, 'test@teste.com');
   });
 
+  
+
+  it('Redireciona corretamente para a rota "/settings" ao clicar no botão "Settings', () => {
+    const { history } = renderWithRouterAndRedux(<App />);
+
+    const btnSettings = screen.getByTestId('btn-settings');
+
+    userEvent.click(btnSettings);
+
+    const {location:{pathname}} = history;
+    expect(pathname).toBe('/settings')
+  });
+
   it('Verifica se o comportamento dos buttons esta correto',  () => {
     const token = {"response_code":0,"response_message":"Token Generated Successfully!","token":"d97b0fd948a017a2e605ae61d43c382f556122cf31b59ce9fc7c04052fbb38fe"}
     
@@ -49,11 +62,12 @@ describe('Testa página de Login', () => {
     const btnPlay = screen.getByTestId('btn-play');
    
     userEvent.type(emailInput,'teste@teste.com');
-    userEvent.type(nameInput,'User');   
+    userEvent.type(nameInput,'User');
+   
     userEvent.click(btnPlay);    
 
     expect(global.fetch).toHaveBeenCalled();
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    expect(global.fetch).toHaveBeenCalledWith('https://opentdb.com/api_token.php?command=request')   
+    expect(global.fetch).toHaveBeenCalledWith('https://opentdb.com/api_token.php?command=request')
   });
 });
