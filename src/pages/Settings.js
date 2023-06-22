@@ -6,7 +6,6 @@ class Settings extends Component {
       <h1 data-testid="settings-title">
         Preferências
       </h1>
-
     );
   }
 }
