@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class Login extends Component {
   state = {
@@ -10,6 +11,14 @@ class Login extends Component {
     this.setState({
       [target.name]: target.value,
     });
+  };
+
+  handleClick = async () => {
+    const { history } = this.props;
+    const response = await fetch('https://opentdb.com/api_token.php?command=request');
+    const { token } = await response.json();
+    localStorage.setItem('token', token);
+    history.push('/game');
   };
 
   render() {
@@ -37,6 +46,7 @@ class Login extends Component {
           type="button"
           data-testid="btn-play"
           disabled={ name.length <= 0 || email.length <= 0 }
+          onClick={ this.handleClick }
         >
           Play
         </button>
@@ -50,5 +60,11 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 export default Login;
