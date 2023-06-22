@@ -23,6 +23,7 @@ class Login extends Component {
 
   render() {
     const { email, name } = this.state;
+    const { history } = this.props;
     return (
       <div>
         <h1>Pagina de Login</h1>
@@ -53,6 +54,7 @@ class Login extends Component {
         <button
           type="button"
           data-testid="btn-settings"
+          onClick={ () => history.push('/settings') }
         >
           Settings
         </button>
