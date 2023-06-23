@@ -8,6 +8,7 @@ class RunGame extends Component {
     questions: undefined,
     isEnabled: true,
     isRightAnswer: undefined,
+    timer: 30,
   };
 
   async componentDidMount() {
@@ -29,6 +30,7 @@ class RunGame extends Component {
         this.sortAnswers(questions);
       });
     }
+    this.handleTimer();
   }
 
   sortAnswers = (questions, index = 0) => {
@@ -74,11 +76,31 @@ class RunGame extends Component {
     }
   };
 
+  handleTimer = () => {
+    const refresh = 1000;
+    const interval = setInterval(() => {
+      let { timer } = this.state;
+      if (timer > 0) {
+        console.log(timer);
+        this.setState({
+          timer: timer -= 1,
+        });
+      } else {
+        clearInterval(interval);
+        this.setState({
+          isEnabled: false,
+          isRightAnswer: false,
+        });
+      }
+    }, refresh);
+  };
+
   render() {
     const {
       questions,
       sortAnswers,
       isEnabled,
+      timer,
     } = this.state;
     return (
       <div>
@@ -122,6 +144,7 @@ class RunGame extends Component {
             </section>
           </>
         )}
+        <h3>{ timer }</h3>
       </div>
     );
   }
