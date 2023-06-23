@@ -1,14 +1,13 @@
 import { Component } from 'react';
 import Header from '../components/Header';
+import RunGame from '../components/RunGame';
 
 class Game extends Component {
   render() {
     return (
       <div>
         <Header />
-        <h1>
-          Jogo
-        </h1>
+        <RunGame />
       </div>
     );
   }
