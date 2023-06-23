@@ -7,7 +7,7 @@ class RunGame extends Component {
   state = {
     questions: undefined,
     isEnabled: true,
-
+    isRightAnswer: undefined,
   };
 
   async componentDidMount() {
@@ -46,6 +46,34 @@ class RunGame extends Component {
     });
   };
 
+  handleAnswer = (event) => {
+    event.preventDefault();
+    const { target } = event;
+    const rightAnswer = target.getAttribute('data-testid').includes('correct-answer');
+    if (rightAnswer) {
+      this.setState({
+        isRightAnswer: true,
+      });
+    }
+    this.setState({
+      isRightAnswer: false,
+    });
+  };
+
+  wrongButtonColor = () => {
+    const { isRightAnswer } = this.state;
+    if (isRightAnswer !== undefined) {
+      return { border: '3px solid red' };
+    }
+  };
+
+  rightButtonColor = () => {
+    const { isRightAnswer } = this.state;
+    if (isRightAnswer !== undefined) {
+      return { border: '3px solid rgb(6, 240, 15)' };
+    }
+  };
+
   render() {
     const {
       questions,
@@ -71,7 +99,9 @@ class RunGame extends Component {
                     <button
                       key={ index }
                       disabled={ !isEnabled }
+                      style={ this.rightButtonColor() }
                       data-testid="correct-answer"
+                      onClick={ this.handleAnswer }
 
                     >
                       {alternative}
@@ -79,8 +109,10 @@ class RunGame extends Component {
                   ) : (
                     <button
                       key={ index }
+                      style={ this.wrongButtonColor() }
                       disabled={ !isEnabled }
                       data-testid={ `wrong-answer-${index}` }
+                      onClick={ this.handleAnswer }
 
                     >
                       {alternative}
