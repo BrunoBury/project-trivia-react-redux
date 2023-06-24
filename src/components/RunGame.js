@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import fetchQuestions from '../helpers/fetchQuestions';
+import { incrementScore } from '../redux/actions';
 
 class RunGame extends Component {
   state = {
@@ -56,6 +57,7 @@ class RunGame extends Component {
       this.setState({
         isRightAnswer: true,
       });
+      this.verifyScore();
     }
     this.setState({
       isRightAnswer: false,
@@ -73,6 +75,14 @@ class RunGame extends Component {
     const { isRightAnswer } = this.state;
     if (isRightAnswer !== undefined) {
       return { border: '3px solid rgb(6, 240, 15)' };
+    }
+  };
+
+  verifyScore = () => {
+    const { isRightAnswer } = this.state;
+    const { dispatch } = this.props;
+    if (isRightAnswer === true) {
+      dispatch(incrementScore(this.state));
     }
   };
 
@@ -154,6 +164,7 @@ RunGame.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 export default withRouter(RunGame);

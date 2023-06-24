@@ -1,9 +1,9 @@
-import { USER_INFO } from '../actions';
+import { USER_INFO, INCREMENT_SCORE } from '../actions';
 
 const initialState = {
   name: '',
   assertions: '',
-  score: '0',
+  score: 0,
   gravatarEmail: '',
 };
 
@@ -13,6 +13,12 @@ const playerReducer = (state = initialState, { type, payload }) => {
     return {
       ...state,
       ...payload,
+    };
+
+  case INCREMENT_SCORE:
+    return {
+      ...state,
+      score: action.payload + state.score,
     };
 
   default:
