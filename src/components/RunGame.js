@@ -8,6 +8,7 @@ import { incrementScore } from '../redux/actions';
 class RunGame extends Component {
   state = {
     questions: undefined,
+    currentQuestionIndex: 0,
     isEnabled: true,
     isRightAnswer: undefined,
     timer: 30,
@@ -124,12 +125,29 @@ class RunGame extends Component {
     });
   };
 
+  handleNextQuestion = () => {
+    const { currentQuestionIndex, questions } = this.state;
+    const nextQuestionIndex = currentQuestionIndex + 1;
+    if (nextQuestionIndex < questions.length) {
+      this.setState({
+        currentQuestionIndex: nextQuestionIndex,
+        isRightAnswer: undefined,
+        isEnabled: true,
+        timer: 30,
+      }, () => {
+        this.sortAnswers(questions, nextQuestionIndex);
+        this.handleTimer();
+      });
+    }
+  };
+
   render() {
     const {
       questions,
       sortAnswers,
       isEnabled,
       timer,
+      isRightAnswer,
     } = this.state;
     return (
       <div>
@@ -171,6 +189,14 @@ class RunGame extends Component {
                   );
               })) }
             </section>
+            {isRightAnswer !== undefined && (
+              <button
+                data-testid="btn-next"
+                onClick={ this.handleNextQuestion }
+              >
+                Next
+              </button>
+            )}
           </>
         )}
         <h3>{ timer }</h3>
