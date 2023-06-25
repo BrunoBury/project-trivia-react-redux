@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 class Header extends Component {
   render() {
     const { name, gravatarEmail, score } = this.props;
-    console.log(score);
     const HASH = MD5(gravatarEmail).toString();
     const gravatarImg = `https://www.gravatar.com/avatar/${HASH}`;
 
@@ -26,8 +25,8 @@ class Header extends Component {
   }
 }
 
-const mapStateToProps = ({ playerReducer }) => ({
-  ...playerReducer,
+const mapStateToProps = ({ player }) => ({
+  ...player,
 });
 
 Header.propTypes = {

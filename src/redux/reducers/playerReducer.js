@@ -7,7 +7,7 @@ const initialState = {
   gravatarEmail: '',
 };
 
-const playerReducer = (state = initialState, { type, payload }) => {
+const player = (state = initialState, { type, payload }) => {
   switch (type) {
   case USER_INFO:
     return {
@@ -18,7 +18,7 @@ const playerReducer = (state = initialState, { type, payload }) => {
   case INCREMENT_SCORE:
     return {
       ...state,
-      score: action.payload + state.score,
+      score: state.score + payload,
     };
 
   default:
@@ -26,4 +26,4 @@ const playerReducer = (state = initialState, { type, payload }) => {
   }
 };
 
-export default playerReducer;
+export default player;

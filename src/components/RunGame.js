@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import fetchQuestions from '../helpers/fetchQuestions';
 import { incrementScore } from '../redux/actions';
 
@@ -10,6 +11,7 @@ class RunGame extends Component {
     isEnabled: true,
     isRightAnswer: undefined,
     timer: 30,
+    intervalId: null,
   };
 
   async componentDidMount() {
@@ -50,18 +52,31 @@ class RunGame extends Component {
   };
 
   handleAnswer = (event) => {
-    event.preventDefault();
     const { target } = event;
-    const rightAnswer = target.getAttribute('data-testid').includes('correct-answer');
+    const rightAnswer = target.getAttribute('data-testid').includes(
+      'correct-answer',
+    );
+    const { intervalId, questions } = this.state;
+    clearInterval(intervalId);
     if (rightAnswer) {
+      this.setState(
+        {
+          isRightAnswer: true,
+        },
+        () => {
+          this.verifyScore();
+        },
+      );
+    } else {
       this.setState({
-        isRightAnswer: true,
+        isRightAnswer: false,
       });
-      this.verifyScore();
+      this.setState((prevState) => ({
+        questions: prevState.questions + 1,
+      }), () => {
+        this.sortAnswers(questions);
+      });
     }
-    this.setState({
-      isRightAnswer: false,
-    });
   };
 
   wrongButtonColor = () => {
@@ -80,29 +95,33 @@ class RunGame extends Component {
 
   verifyScore = () => {
     const { isRightAnswer } = this.state;
-    const { dispatch } = this.props;
+    const somNumber = 10;
+    const { incrementScores } = this.props;
     if (isRightAnswer === true) {
-      dispatch(incrementScore(this.state));
+      incrementScores(somNumber);
     }
   };
 
   handleTimer = () => {
     const refresh = 1000;
-    const interval = setInterval(() => {
-      let { timer } = this.state;
-      if (timer > 0) {
-        console.log(timer);
-        this.setState({
-          timer: timer -= 1,
-        });
-      } else {
-        clearInterval(interval);
-        this.setState({
-          isEnabled: false,
-          isRightAnswer: false,
-        });
-      }
+    const intervalId = setInterval(() => {
+      this.setState((prevState) => ({
+        timer: prevState.timer - 1,
+      }), () => {
+        const { timer } = this.state;
+        if (timer <= 0) {
+          clearInterval(intervalId);
+          this.setState({
+            isEnabled: false,
+            isRightAnswer: false,
+            intervalId: null,
+          });
+        }
+      });
     }, refresh);
+    this.setState({
+      intervalId,
+    });
   };
 
   render() {
@@ -164,7 +183,11 @@ RunGame.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
+  incrementScores: PropTypes.func.isRequired,
 };
 
-export default withRouter(RunGame);
+const mapDispatchToProps = (dispatch) => ({
+  incrementScores: (score) => dispatch(incrementScore(score)),
+});
+
+export default connect(null, mapDispatchToProps)(withRouter(RunGame));
