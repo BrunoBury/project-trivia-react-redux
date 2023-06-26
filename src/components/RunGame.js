@@ -57,7 +57,7 @@ class RunGame extends Component {
     const rightAnswer = target.getAttribute('data-testid').includes(
       'correct-answer',
     );
-    const { intervalId, questions } = this.state;
+    const { intervalId } = this.state;
     clearInterval(intervalId);
     if (rightAnswer) {
       this.setState(
@@ -72,11 +72,11 @@ class RunGame extends Component {
       this.setState({
         isRightAnswer: false,
       });
-      this.setState((prevState) => ({
-        questions: prevState.questions + 1,
-      }), () => {
-        this.sortAnswers(questions);
-      });
+      // this.setState((prevState) => ({
+      //   questions: prevState.questions + 1,
+      // }), () => {
+      //   this.sortAnswers(questions);
+      // });
     }
   };
 
@@ -140,6 +140,7 @@ class RunGame extends Component {
 
   handleNextQuestion = () => {
     const { currentQuestionIndex, questions } = this.state;
+    const { history } = this.props;
     const nextQuestionIndex = currentQuestionIndex + 1;
     if (nextQuestionIndex < questions.length) {
       this.setState({
@@ -151,6 +152,8 @@ class RunGame extends Component {
         this.sortAnswers(questions, nextQuestionIndex);
         this.handleTimer();
       });
+    } else {
+      history.push('./feedback');
     }
   };
 
