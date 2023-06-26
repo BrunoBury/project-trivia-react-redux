@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 import Header from '../components/Header';
 
 class Feedback extends Component {
@@ -77,4 +78,4 @@ Feedback.propTypes = {
   }).isRequired,
 };
 
-export default connect(mapStateToProps)(Feedback);
+export default connect(mapStateToProps)(withRouter(Feedback));

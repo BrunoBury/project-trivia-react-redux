@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 class Ranking extends Component {
   render() {
-    const { history } = this.props;
+    const {
+      history,
+    } = this.props;
     return (
       <>
         <h1 data-testid="ranking-title">
