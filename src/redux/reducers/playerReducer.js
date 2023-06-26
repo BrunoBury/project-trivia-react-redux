@@ -1,8 +1,12 @@
-import { USER_INFO, INCREMENT_SCORE } from '../actions';
+import {
+  USER_INFO,
+  INCREMENT_SCORE,
+  INCREMENT_ASSERTION,
+} from '../actions';
 
 const initialState = {
   name: '',
-  assertions: '',
+  assertions: 0,
   score: 0,
   gravatarEmail: '',
 };
@@ -19,6 +23,12 @@ const player = (state = initialState, { type, payload }) => {
     return {
       ...state,
       score: state.score + payload,
+    };
+
+  case INCREMENT_ASSERTION:
+    return {
+      ...state,
+      assertions: state.assertions + payload,
     };
 
   default:

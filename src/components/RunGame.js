@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import fetchQuestions from '../helpers/fetchQuestions';
-import { incrementScore } from '../redux/actions';
+import { incrementScore, incrementAssertion } from '../redux/actions';
 
 class RunGame extends Component {
   state = {
@@ -109,10 +109,12 @@ class RunGame extends Component {
 
     const baseScore = 10;
     const score = baseScore + (timer * difficultyMultiplier);
-    const { incrementScores } = this.props;
+    const assertionValue = 1;
+    const { incrementScores, incrementAssertions } = this.props;
 
     if (isRightAnswer === true) {
       incrementScores(score);
+      incrementAssertions(assertionValue);
     }
   };
 
@@ -235,10 +237,12 @@ RunGame.propTypes = {
     push: PropTypes.func,
   }).isRequired,
   incrementScores: PropTypes.func.isRequired,
+  incrementAssertions: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => ({
   incrementScores: (score) => dispatch(incrementScore(score)),
+  incrementAssertions: (assertions) => dispatch(incrementAssertion(assertions)),
 });
 
 export default connect(null, mapDispatchToProps)(withRouter(RunGame));
