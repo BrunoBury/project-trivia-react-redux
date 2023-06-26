@@ -95,11 +95,24 @@ class RunGame extends Component {
   };
 
   verifyScore = () => {
-    const { isRightAnswer } = this.state;
-    const somNumber = 10;
+    const { isRightAnswer, timer, questions, currentQuestionIndex } = this.state;
+    const { difficulty } = questions[currentQuestionIndex];
+    const medium = 2;
+    const hard = 3;
+    let difficultyMultiplier = 1;
+
+    if (difficulty === 'medium') {
+      difficultyMultiplier = medium;
+    } else if (difficulty === 'hard') {
+      difficultyMultiplier = hard;
+    }
+
+    const baseScore = 10;
+    const score = baseScore + (timer * difficultyMultiplier);
     const { incrementScores } = this.props;
+
     if (isRightAnswer === true) {
-      incrementScores(somNumber);
+      incrementScores(score);
     }
   };
 
@@ -148,6 +161,7 @@ class RunGame extends Component {
       isEnabled,
       timer,
       isRightAnswer,
+      currentQuestionIndex,
     } = this.state;
     return (
       <div>
@@ -156,8 +170,16 @@ class RunGame extends Component {
           <>
             <h1>Perguntas:</h1>
             <h2>Categoria:</h2>
-            <h3 data-testid="question-category">{questions[0].category}</h3>
-            <p data-testid="question-text">{questions[0].question}</p>
+            <h3
+              data-testid="question-category"
+            >
+              {questions[currentQuestionIndex].category}
+            </h3>
+            <p
+              data-testid="question-text"
+            >
+              {questions[currentQuestionIndex].question}
+            </p>
 
             <section data-testid="answer-options">
               {sortAnswers && (sortAnswers.map((answer, index) => {
